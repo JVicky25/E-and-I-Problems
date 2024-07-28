@@ -1,1 +1,72 @@
+// utils/LoggerUtil.java
+package utils;
+
+import java.util.logging.Logger;
+
+public class LoggerUtil {
+    private static final Logger logger = Logger.getLogger(LoggerUtil.class.getName());
+
+    public static void logInfo(String message) {
+        logger.info(message);
+    }
+
+    public static void logError(String message, Throwable e) {
+        logger.severe(message + " - " + e.getMessage());
+    }
+}
+
+// models/WeatherStation.java
+package models;
+
+import utils.LoggerUtil;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class WeatherStation {
+    private List<WeatherDisplay> displays = new ArrayList<>();
+    private int temperature;
+
+    public void addObserver(WeatherDisplay display) {
+        displays.add(display);
+    }
+
+    public void removeObserver(WeatherDisplay display) {
+        displays.remove(display);
+    }
+
+    public void setTemperature(int temperature) {
+        this.temperature = temperature;
+        notifyObservers();
+    }
+
+    private void notifyObservers() {
+        for (WeatherDisplay display : displays) {
+            display.update(temperature);
+        }
+        LoggerUtil.logInfo("Temperature updated to " + temperature);
+    }
+}
+
+// models/WeatherDisplay.java
+package models;
+
+public interface WeatherDisplay {
+    void update(int temperature);
+}
+
+// models/CurrentConditionsDisplay.java
+package models;
+
+import utils.LoggerUtil;
+
+public class CurrentConditionsDisplay implements WeatherDisplay {
+    private int temperature;
+
+    @Override
+    public void update(int temperature) {
+        this.temperature = temperature;
+        LoggerUtil.logInfo("Current conditions updated: " + temperature);
+    }
+}
 

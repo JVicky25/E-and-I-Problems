@@ -1,1 +1,60 @@
+// models/PaymentStrategy.java
+package models;
+
+public interface PaymentStrategy {
+    void pay(double amount);
+}
+
+package models;
+
+import utils.LoggerUtil;
+
+public class CreditCardPayment implements PaymentStrategy {
+    private String cardNumber;
+
+    public CreditCardPayment(String cardNumber) {
+        this.cardNumber = cardNumber;
+    }
+
+    @Override
+    public void pay(double amount) {
+        // Logic for credit card payment
+        LoggerUtil.logInfo("Paid " + amount + " using Credit Card.");
+    }
+}
+
+package models;
+
+import utils.LoggerUtil;
+
+public class PayPalPayment implements PaymentStrategy {
+    private String email;
+
+    public PayPalPayment(String email) {
+        this.email = email;
+    }
+
+    @Override
+    public void pay(double amount) {
+        // Logic for PayPal payment
+        LoggerUtil.logInfo("Paid " + amount + " using PayPal.");
+    }
+}
+
+package models;
+
+public class PaymentProcessor {
+    private PaymentStrategy strategy;
+
+    public void setPaymentStrategy(PaymentStrategy strategy) {
+        this.strategy = strategy;
+    }
+
+    public void processPayment(double amount) {
+        if (strategy == null) {
+            throw new IllegalStateException("Payment strategy not set");
+        }
+        strategy.pay(amount);
+    }
+}
 

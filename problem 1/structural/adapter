@@ -1,1 +1,89 @@
+// models/MediaPlayer.java
+package models;
+
+public interface MediaPlayer {
+    void play(String audioType, String fileName);
+}
+
+package models;
+
+public interface AdvancedMediaPlayer {
+    void playVlc(String fileName);
+    void playMp4(String fileName);
+}
+
+package models;
+
+import utils.LoggerUtil;
+
+public class VlcPlayer implements AdvancedMediaPlayer {
+    @Override
+    public void playVlc(String fileName) {
+        LoggerUtil.logInfo("Playing vlc file: " + fileName);
+    }
+
+    @Override
+    public void playMp4(String fileName) {
+        // Do nothing
+    }
+}
+
+package models;
+
+import utils.LoggerUtil;
+
+public class Mp4Player implements AdvancedMediaPlayer {
+    @Override
+    public void playVlc(String fileName) {
+        // Do nothing
+    }
+
+    @Override
+    public void playMp4(String fileName) {
+        LoggerUtil.logInfo("Playing mp4 file: " + fileName);
+    }
+}
+
+package models;
+
+public class MediaAdapter implements MediaPlayer {
+    AdvancedMediaPlayer advancedMusicPlayer;
+
+    public MediaAdapter(String audioType) {
+        if (audioType.equalsIgnoreCase("vlc")) {
+            advancedMusicPlayer = new VlcPlayer();
+        } else if (audioType.equalsIgnoreCase("mp4")) {
+            advancedMusicPlayer = new Mp4Player();
+        }
+    }
+
+    @Override
+    public void play(String audioType, String fileName) {
+        if (audioType.equalsIgnoreCase("vlc")) {
+            advancedMusicPlayer.playVlc(fileName);
+        } else if (audioType.equalsIgnoreCase("mp4")) {
+            advancedMusicPlayer.playMp4(fileName);
+        }
+    }
+}
+
+package models;
+
+import utils.LoggerUtil;
+
+public class AudioPlayer implements MediaPlayer {
+    MediaAdapter mediaAdapter;
+
+    @Override
+    public void play(String audioType, String fileName) {
+        if (audioType.equalsIgnoreCase("mp3")) {
+            LoggerUtil.logInfo("Playing mp3 file: " + fileName);
+        } else if (audioType.equalsIgnoreCase("vlc") || audioType.equalsIgnoreCase("mp4")) {
+            mediaAdapter = new MediaAdapter(audioType);
+            mediaAdapter.play(audioType, fileName);
+        } else {
+            LoggerUtil.logInfo("Invalid media. " + audioType + " format not supported");
+        }
+    }
+}
 

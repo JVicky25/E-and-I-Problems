@@ -1,1 +1,84 @@
+// models/Coffee.java
+package models;
+
+public interface Coffee {
+    double getCost();
+    String getDescription();
+}
+
+package models;
+
+import utils.LoggerUtil;
+
+public class SimpleCoffee implements Coffee {
+    @Override
+    public double getCost() {
+        return 5;
+    }
+
+    @Override
+    public String getDescription() {
+        return "Simple Coffee";
+    }
+}
+
+package models;
+
+public abstract class CoffeeDecorator implements Coffee {
+    protected Coffee decoratedCoffee;
+
+    public CoffeeDecorator(Coffee coffee) {
+        this.decoratedCoffee = coffee;
+    }
+
+    @Override
+    public double getCost() {
+        return decoratedCoffee.getCost();
+    }
+
+    @Override
+    public String getDescription() {
+        return decoratedCoffee.getDescription();
+    }
+}
+
+package models;
+
+import utils.LoggerUtil;
+
+public class MilkDecorator extends CoffeeDecorator {
+    public MilkDecorator(Coffee coffee) {
+        super(coffee);
+    }
+
+    @Override
+    public double getCost() {
+        return super.getCost() + 1.5;
+    }
+
+    @Override
+    public String getDescription() {
+        return super.getDescription() + ", Milk";
+    }
+}
+
+package models;
+
+import utils.LoggerUtil;
+
+public class SugarDecorator extends CoffeeDecorator {
+    public SugarDecorator(Coffee coffee) {
+        super(coffee);
+    }
+
+    @Override
+    public double getCost() {
+        return super.getCost() + 0.5;
+    }
+
+    @Override
+    public String getDescription() {
+        return super.getDescription() + ", Sugar";
+    }
+}
 
